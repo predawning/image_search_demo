@@ -1,15 +1,31 @@
 <!doctype html>
 <html>
 <head>
+    <title> 图片搜索 </title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
    <link href="/css/custom.css" rel="stylesheet">
    <script>
+    var myApp;
+    myApp = myApp || (function () {
+        var pleaseWaitDiv = $('<div class="modal fade" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="basicModal" aria-hidden="true" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1>正在上传处理中, 请耐心等待...</h1></div><div class="modal-body"><div class="progress progress-striped active"><div class="progress-bar" style="width: 100%;"><span class="sr-only">60% Complete</span></div></div></div></div></div></div></div></div>');
+        return {
+            showPleaseWait: function () {
+                pleaseWaitDiv.modal();
+            },
+            hidePleaseWait: function () {
+                pleaseWaitDiv.modal('hide');
+            },
+
+        };
+    })();
+
     $(document).on('change', '.btn-file :file', function() {
       var input = $(this),
           numFiles = input.get(0).files ? input.get(0).files.length : 1,
           label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+      myApp.showPleaseWait();
       input.trigger('fileselect', [numFiles, label]);
     });
 
@@ -30,9 +46,7 @@
    </script>
 
 </head>
-<body>
-
-    <title> 图片搜索 </title>
+<body >
 
 <div id="nav">
 <ul class="nav nav-tabs">
@@ -44,7 +58,7 @@
 </div>
 </ul>
 
-<div class="container" >
+<div id="content" class="container" >
     <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
     <form id="form" action="/category/{{active_category}}/upload/" method="post" enctype="multipart/form-data">
         <div class="col-lg-8 col-lg-offset-2">
@@ -63,7 +77,7 @@
 
 {% if upload_img %}
     <div class="row">
-        <h3> 您要找的图片 </h3>
+        <h3> 您上传的图片 </h3>
         <div class="col-sm-6 thumbnail">
             <img src={{ upload_img }}>
         </div>
@@ -71,7 +85,11 @@
 {% endif %}
 
     <div class="row">
-        <h3> 为您找到图片 </h3>
+{% if upload_img %}
+        <h3> 相关图片 </h3>
+{% else %}
+        <h3> 图片库 </h3>
+{% endif %}
         {% for img in images %}
         <div class="col-sm-3">
           <a href="{{ img }}" class="thumbnail">
@@ -81,6 +99,7 @@
         {% endfor %}
     </div>
 </div>
+
 </body>
 </html>
 
