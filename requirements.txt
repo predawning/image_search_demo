@@ -1,6 +1,4 @@
 --index-url=http://myusername:youpass@pypi.lxdb.jiake.org/simple/
 
 Flask
-enum
-numpy
-pyopencv
+enum34
