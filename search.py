@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os
 
 count = 4000
 descriptor = cv2.SURF(count)
@@ -8,6 +9,9 @@ npy_pattern = '%%s-surf-%s' % count
 def getDes(img_name):
     np_name = img_name[:-4]
     np_name = np_name.replace('/pages/', '/npys/')
+    directory = np_name[:np_name.rfind('/')+1]
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     np_name = npy_pattern % np_name
     try:
         npy = '%s.npy' % np_name
