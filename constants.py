@@ -8,8 +8,8 @@ class Category(Enum):
     porcelain_craft = 154
     oil_painting_and_sculpture = 155
     ancient_coin = 156
-    collection = 157
-    paper_money = 158
+    collection = 158
+    paper_money = 159
 
 
 categories = [{'id': Category.painting_and_calligraphy1.value, 'name': u'中国书画(一)'},
