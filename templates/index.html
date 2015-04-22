@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/custom.css" rel="stylesheet">
+   <script>
+    $(document).on('change', '.btn-file :file', function() {
+      var input = $(this),
+          numFiles = input.get(0).files ? input.get(0).files.length : 1,
+          label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+      input.trigger('fileselect', [numFiles, label]);
+    });
+
+    $(document).ready( function() {
+        $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+
+            var input = $(this).parents('.input-group').find(':text'),
+                log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+            if( input.length ) {
+                input.val(log);
+            } else {
+                if( log ) alert(log);
+            }
+            document.getElementById("form").submit();
+        });
+    });
+   </script>
+
+</head>
+<body>
+
+    <title> 图片搜索 </title>
+
+<div id="nav">
+<ul class="nav nav-tabs">
+    {% for category in categories %}
+        <li role="presentation" {% if category.id == active_category %} class="active" {% endif %}><a href="/category/{{ category.id }}/"  >
+             {{ category.name }}
+         </a></li>
+    {% endfor %}
+</div>
+</ul>
+
+<div class="container" >
+    <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
+    <form id="form" action="/category/{{active_category}}/upload/" method="post" enctype="multipart/form-data">
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file">
+                        本地上传&hellip; <input type="file" name="file">
+                    </span>
+                </span>
+                <input type="text" class="form-control" readonly>
+            </div>
+        </div>
+    </form>
+    </div>
+
+
+{% if upload_img %}
+    <div class="row">
+        <h3> 您要找的图片 </h3>
+        <div class="col-sm-6 thumbnail">
+            <img src={{ upload_img }}>
+        </div>
+    </div>
+{% endif %}
+
+    <div class="row">
+        <h3> 为您找到图片 </h3>
+        {% for img in images %}
+        <div class="col-sm-3">
+          <a href="{{ img }}" class="thumbnail">
+            <img src="{{ img }}" >
+          </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
+
+

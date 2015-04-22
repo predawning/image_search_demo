@@ -1,0 +1,15 @@
+
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - 搜索</title>
+    {% else %}
+    <title>欢迎图片搜索</title>
+    {% endif %}
+  </head>
+  <body>
+    <div>Microblog: <a href="/index">Home</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>
